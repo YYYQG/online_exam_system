@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- 缓存管理器 使用Ehcache实现 -->
+    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache-shiro.xml"
+        /> </bean>
+
+    <!--<bean id="jdbcRealm" class="com.xxx.realm.MyRealm">
+    </bean>-->
+
+    <!-- securityManager -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+
+        <!-- Single realm app. If you have multiple realms, use the 'realms' property
+            instead. -->
+        <!--<property name="realm" ref="jdbcRealm" />-->
+    </bean>
+    <!-- ========================================================= Shiro Spring-specific
+        integration ========================================================= -->
+    <!-- 匹配器 -->
+    <bean id="credentialsMatcher" class="com.xxx.util.RetryLimitHashedCredentialsMatcher">
+        <constructor-arg ref="cacheManager"/>
+        <property name="hashAlgorithmName" value="md5"/>
+        <property name="hashIterations" value="2"/>
+        <property name="storedCredentialsHexEncoded" value="true"/>
+    </bean>
+
+    <!-- Define the Shiro Filter here (as a FactoryBean) instead of directly
+        in web.xml - web.xml uses the DelegatingFilterProxy to access this bean.
+        This allows us to wire things with more control as well utilize nice Spring
+        things such as PropertiesPlaceholderConfigurer and abstract beans or anything
+        else we might need: -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/index"/>
+        <property name="successUrl" value="/error.do"/>
+        <property name="unauthorizedUrl" value="/error.do"/>
+        <!-- The 'filters' property is not necessary since any declared javax.servlet.Filter
+            bean defined will be automatically acquired and available via its beanName
+            in chain definitions, but you can perform overrides or parent/child consolidated
+            configuration here if you like: -->
+        <!-- <property name="filters"> <util:map> <entry key="aName" value-ref="someFilterPojo"/>
+            </util:map> </property> -->
+        <property name="filterChainDefinitions">
+            <value>
+                /static/** = anon
+                #/adduser.do=roles[admain]
+                /** = authc
+                #/** = anon
+            </value>
+        </property>
+    </bean>
+
+</beans>

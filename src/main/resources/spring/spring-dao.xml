@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+    <!-- <context:property-placeholder location="classpath:mybatis/jdbc.properties"
+        /> -->
+    <bean id="ds" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+          destroy-method="close">
+
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property
+                name="jdbcUrl"
+                value="jdbc:mysql://localhost:3306/exam_system?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8"/>
+        <property name="user" value="root"/>
+        <property name="password" value="root"/>
+        <property name="maxPoolSize" value="30"></property>
+        <property name="minPoolSize" value="10"></property>
+        <!--关闭连接后不自动Commit -->
+        <property name="autoCommitOnClose" value="false"></property>
+        <!-- 获取连接超时时间 -->
+        <property name="checkoutTimeout" value="3000"></property>
+        <!-- 当获取连接失败重试次数 -->
+        <property name="acquireRetryAttempts" value="3"></property>
+        <!-- 连接最大存活时间 -->
+        <!-- <property name="maxIdleTime" value="1800" /> -->
+        <!--定义所有连接测试都执行的测试语句。在使用连接测试的情况下这个显著提高测试速度。默认null -->
+        <property name="preferredTestQuery" value="select 1"/>
+        <!-- 归还连接检测，所以将其设置为false -->
+        <property name="testConnectionOnCheckin" value="false"></property>
+        <!-- 设置为true，异步检测连接的有效性 -->
+        <property name="testConnectionOnCheckout" value="true"></property>
+        <!--每6个小时检查所有连接池中的空闲连接，这个值一定要小于MySQL的wait_timeout时间，默认为8小时。默认0 -->
+        <property name="idleConnectionTestPeriod" value="21600"></property>
+    </bean>
+    <!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="ds"/>
+        <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/>
+        <!--<property name="mapperLocations" value="classpath:mapper/*.xml"/>-->
+    </bean>
+
+    <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.xxx.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="ds"></property>
+    </bean>
+    <tx:annotation-driven/>
+</beans>
