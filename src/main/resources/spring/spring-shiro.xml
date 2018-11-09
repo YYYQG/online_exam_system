@@ -5,52 +5,62 @@
     <!-- 缓存管理器 使用Ehcache实现 -->
     <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
         <property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache-shiro.xml"
-        /> </bean>
-
-    <!--<bean id="jdbcRealm" class="com.xxx.realm.MyRealm">
-    </bean>-->
-
-    <!-- securityManager -->
-    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-
-        <!-- Single realm app. If you have multiple realms, use the 'realms' property
-            instead. -->
-        <!--<property name="realm" ref="jdbcRealm" />-->
-    </bean>
-    <!-- ========================================================= Shiro Spring-specific
-        integration ========================================================= -->
-    <!-- 匹配器 -->
-    <bean id="credentialsMatcher" class="com.xxx.util.RetryLimitHashedCredentialsMatcher">
-        <constructor-arg ref="cacheManager"/>
-        <property name="hashAlgorithmName" value="md5"/>
-        <property name="hashIterations" value="2"/>
-        <property name="storedCredentialsHexEncoded" value="true"/>
+        />
     </bean>
 
-    <!-- Define the Shiro Filter here (as a FactoryBean) instead of directly
-        in web.xml - web.xml uses the DelegatingFilterProxy to access this bean.
-        This allows us to wire things with more control as well utilize nice Spring
-        things such as PropertiesPlaceholderConfigurer and abstract beans or anything
-        else we might need: -->
+    <!--启用Shiro授权租界拦截方式-->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!--注入安全管理器-->
         <property name="securityManager" ref="securityManager"/>
-        <property name="loginUrl" value="/index"/>
-        <property name="successUrl" value="/error.do"/>
-        <property name="unauthorizedUrl" value="/error.do"/>
-        <!-- The 'filters' property is not necessary since any declared javax.servlet.Filter
-            bean defined will be automatically acquired and available via its beanName
-            in chain definitions, but you can perform overrides or parent/child consolidated
-            configuration here if you like: -->
-        <!-- <property name="filters"> <util:map> <entry key="aName" value-ref="someFilterPojo"/>
-            </util:map> </property> -->
+        <property name="loginUrl" value="/index.jsp"/>
+        <!--成功页面-->
+        <property name="successUrl" value="/index"/>
+        <!--权限不足提示页面-->
+        <property name="unauthorizedUrl" value="/WEB-INF/common/500.jsp"/>
+
         <property name="filterChainDefinitions">
             <value>
-                /static/** = anon
-                #/adduser.do=roles[admain]
-                /** = authc
-                #/** = anon
+                /css/** =anon
+                /js/** =anon
+                /login=anon
+                /logout=logout
+                /*=authc
             </value>
         </property>
+    </bean>
+
+
+    <!--配置密码匹配器-->
+    <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        <!--加密算法的名称-->
+        <property name="hashAlgorithmName" value="md5"/>
+        <!--加密算法的次数-->
+        <property name="hashIterations" value="1"/>
+    </bean>
+
+    <bean id="userRealm" class="com.xxx.realm.UserRealm">
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+    </bean>
+
+    <!--配置Shiro的Security Manager-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <!--注入Realm-->
+        <property name="realm" ref="userRealm"/>
+        <!--注入缓存管理器-->
+        <property name="cacheManager" ref="cacheManager"/>
+    </bean>
+
+    <!--配置Bean的后置处理器：会自动的调用和Spring整合后各个组件的生命周期方法-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+    <!--启用Shiro注解-->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor">
+        <property name="proxyTargetClass" value="true"/>
+    </bean>
+
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
     </bean>
 
 </beans>
