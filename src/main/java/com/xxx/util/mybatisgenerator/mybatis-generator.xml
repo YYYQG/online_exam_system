@@ -13,27 +13,57 @@
 
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/blog?useUnicode=true&amp;characterEncoding=UTF8"
+                        connectionURL="jdbc:mysql://localhost:3306/exam_system?useUnicode=true&amp;characterEncoding=UTF8"
                         userId="root"
                         password="123456">
         </jdbcConnection>
         <!--需要修改targetProject-->
-        <javaModelGenerator targetPackage="com.dimple.bean.test"
-                            targetProject=""/>
+        <javaModelGenerator targetPackage="com.xxx.bean"
+                            targetProject="E:\Code\SSM\online_exam_system\src\main\java"/>
 
         <!--需要修改targetProject-->
 
-        <sqlMapGenerator targetPackage="com.dimple.dao.mapper"
-                         targetProject=""/>
+        <sqlMapGenerator targetPackage="com.xxx.dao.mapper"
+                         targetProject="E:\Code\SSM\online_exam_system\src\main\java"/>
 
         <!--需要修改targetProject-->
 
-        <javaClientGenerator targetPackage="com.dimple.dao"
-                             targetProject=""
+        <javaClientGenerator targetPackage="com.xxx.dao"
+                             targetProject="E:\Code\SSM\online_exam_system\src\main\java"
                              type="XMLMAPPER"/>
 
         <!--可配置多个table-->
-        <table tableName="category">
+        <table tableName="exam">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="exam_problem">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="exam_user">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="judgeproblem">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="multiproblem">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="permission">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="role">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="role_permission">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="singleproblem">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="user">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="user_role">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

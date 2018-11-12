@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xxx.dao.ExamUserMapper" >
+  <resultMap id="BaseResultMap" type="com.xxx.bean.ExamUser" >
+    <id column="exam_id" property="examId" jdbcType="INTEGER" />
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="singleproblem_score" property="singleproblemScore" jdbcType="INTEGER" />
+    <result column="multisproblem_score" property="multisproblemScore" jdbcType="INTEGER" />
+    <result column="judgeproblem_score" property="judgeproblemScore" jdbcType="INTEGER" />
+    <result column="locked" property="locked" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    exam_id, user_id, singleproblem_score, multisproblem_score, judgeproblem_score, locked
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.xxx.bean.ExamUserExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from exam_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.xxx.bean.ExamUserKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from exam_user
+    where exam_id = #{examId,jdbcType=INTEGER}
+      and user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.xxx.bean.ExamUserKey" >
+    delete from exam_user
+    where exam_id = #{examId,jdbcType=INTEGER}
+      and user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xxx.bean.ExamUserExample" >
+    delete from exam_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xxx.bean.ExamUser" >
+    insert into exam_user (exam_id, user_id, singleproblem_score, 
+      multisproblem_score, judgeproblem_score, 
+      locked)
+    values (#{examId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{singleproblemScore,jdbcType=INTEGER}, 
+      #{multisproblemScore,jdbcType=INTEGER}, #{judgeproblemScore,jdbcType=INTEGER}, 
+      #{locked,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xxx.bean.ExamUser" >
+    insert into exam_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="examId != null" >
+        exam_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="singleproblemScore != null" >
+        singleproblem_score,
+      </if>
+      <if test="multisproblemScore != null" >
+        multisproblem_score,
+      </if>
+      <if test="judgeproblemScore != null" >
+        judgeproblem_score,
+      </if>
+      <if test="locked != null" >
+        locked,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="examId != null" >
+        #{examId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="singleproblemScore != null" >
+        #{singleproblemScore,jdbcType=INTEGER},
+      </if>
+      <if test="multisproblemScore != null" >
+        #{multisproblemScore,jdbcType=INTEGER},
+      </if>
+      <if test="judgeproblemScore != null" >
+        #{judgeproblemScore,jdbcType=INTEGER},
+      </if>
+      <if test="locked != null" >
+        #{locked,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.xxx.bean.ExamUserExample" resultType="java.lang.Integer" >
+    select count(*) from exam_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update exam_user
+    <set >
+      <if test="record.examId != null" >
+        exam_id = #{record.examId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.singleproblemScore != null" >
+        singleproblem_score = #{record.singleproblemScore,jdbcType=INTEGER},
+      </if>
+      <if test="record.multisproblemScore != null" >
+        multisproblem_score = #{record.multisproblemScore,jdbcType=INTEGER},
+      </if>
+      <if test="record.judgeproblemScore != null" >
+        judgeproblem_score = #{record.judgeproblemScore,jdbcType=INTEGER},
+      </if>
+      <if test="record.locked != null" >
+        locked = #{record.locked,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update exam_user
+    set exam_id = #{record.examId,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      singleproblem_score = #{record.singleproblemScore,jdbcType=INTEGER},
+      multisproblem_score = #{record.multisproblemScore,jdbcType=INTEGER},
+      judgeproblem_score = #{record.judgeproblemScore,jdbcType=INTEGER},
+      locked = #{record.locked,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xxx.bean.ExamUser" >
+    update exam_user
+    <set >
+      <if test="singleproblemScore != null" >
+        singleproblem_score = #{singleproblemScore,jdbcType=INTEGER},
+      </if>
+      <if test="multisproblemScore != null" >
+        multisproblem_score = #{multisproblemScore,jdbcType=INTEGER},
+      </if>
+      <if test="judgeproblemScore != null" >
+        judgeproblem_score = #{judgeproblemScore,jdbcType=INTEGER},
+      </if>
+      <if test="locked != null" >
+        locked = #{locked,jdbcType=BIT},
+      </if>
+    </set>
+    where exam_id = #{examId,jdbcType=INTEGER}
+      and user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xxx.bean.ExamUser" >
+    update exam_user
+    set singleproblem_score = #{singleproblemScore,jdbcType=INTEGER},
+      multisproblem_score = #{multisproblemScore,jdbcType=INTEGER},
+      judgeproblem_score = #{judgeproblemScore,jdbcType=INTEGER},
+      locked = #{locked,jdbcType=BIT}
+    where exam_id = #{examId,jdbcType=INTEGER}
+      and user_id = #{userId,jdbcType=INTEGER}
+  </update>
+</mapper>

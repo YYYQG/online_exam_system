@@ -20,7 +20,7 @@ public class StartUp {
             List<String> warnings = new ArrayList<String>();
             boolean overwrite = true;
             //直接获取generatorConfig.xml的文件路径 根据具体情况查看
-            File configFile = new File("E:\\Code\\JavaSE\\DimpleBlog\\src\\main\\java\\com\\dimple\\utils\\mybatisGenerator\\mybatis-generator.xml");
+            File configFile = new File("E:\\Code\\SSM\\online_exam_system\\src\\main\\java\\com\\xxx\\util\\mybatisgenerator\\mybatis-generator.xml");
             ConfigurationParser cp = new ConfigurationParser(warnings);
             Configuration config = cp.parseConfiguration(configFile);
             DefaultShellCallback callback = new DefaultShellCallback(overwrite);

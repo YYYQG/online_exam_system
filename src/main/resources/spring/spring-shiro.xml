@@ -4,8 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <!-- 缓存管理器 使用Ehcache实现 -->
     <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-        <property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache-shiro.xml"
-        />
+        <property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache-shiro.xml"/>
     </bean>
 
     <!--启用Shiro授权租界拦截方式-->
@@ -21,6 +20,7 @@
         <property name="filterChainDefinitions">
             <value>
                 /css/** =anon
+                /index.jsp=anon
                 /js/** =anon
                 /login=anon
                 /logout=logout

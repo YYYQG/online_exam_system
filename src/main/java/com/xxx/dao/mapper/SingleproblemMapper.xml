@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xxx.dao.SingleproblemMapper" >
+  <resultMap id="BaseResultMap" type="com.xxx.bean.Singleproblem" >
+    <id column="single_problem_id" property="singleProblemId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="optionA" property="optiona" jdbcType="VARCHAR" />
+    <result column="optionB" property="optionb" jdbcType="VARCHAR" />
+    <result column="optionC" property="optionc" jdbcType="VARCHAR" />
+    <result column="optionD" property="optiond" jdbcType="VARCHAR" />
+    <result column="answer" property="answer" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    single_problem_id, title, optionA, optionB, optionC, optionD, answer
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.xxx.bean.SingleproblemExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from singleproblem
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from singleproblem
+    where single_problem_id = #{singleProblemId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from singleproblem
+    where single_problem_id = #{singleProblemId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xxx.bean.SingleproblemExample" >
+    delete from singleproblem
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xxx.bean.Singleproblem" >
+    insert into singleproblem (single_problem_id, title, optionA, 
+      optionB, optionC, optionD, 
+      answer)
+    values (#{singleProblemId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{optiona,jdbcType=VARCHAR}, 
+      #{optionb,jdbcType=VARCHAR}, #{optionc,jdbcType=VARCHAR}, #{optiond,jdbcType=VARCHAR}, 
+      #{answer,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xxx.bean.Singleproblem" >
+    insert into singleproblem
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="singleProblemId != null" >
+        single_problem_id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="optiona != null" >
+        optionA,
+      </if>
+      <if test="optionb != null" >
+        optionB,
+      </if>
+      <if test="optionc != null" >
+        optionC,
+      </if>
+      <if test="optiond != null" >
+        optionD,
+      </if>
+      <if test="answer != null" >
+        answer,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="singleProblemId != null" >
+        #{singleProblemId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="optiona != null" >
+        #{optiona,jdbcType=VARCHAR},
+      </if>
+      <if test="optionb != null" >
+        #{optionb,jdbcType=VARCHAR},
+      </if>
+      <if test="optionc != null" >
+        #{optionc,jdbcType=VARCHAR},
+      </if>
+      <if test="optiond != null" >
+        #{optiond,jdbcType=VARCHAR},
+      </if>
+      <if test="answer != null" >
+        #{answer,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.xxx.bean.SingleproblemExample" resultType="java.lang.Integer" >
+    select count(*) from singleproblem
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update singleproblem
+    <set >
+      <if test="record.singleProblemId != null" >
+        single_problem_id = #{record.singleProblemId,jdbcType=INTEGER},
+      </if>
+      <if test="record.title != null" >
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.optiona != null" >
+        optionA = #{record.optiona,jdbcType=VARCHAR},
+      </if>
+      <if test="record.optionb != null" >
+        optionB = #{record.optionb,jdbcType=VARCHAR},
+      </if>
+      <if test="record.optionc != null" >
+        optionC = #{record.optionc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.optiond != null" >
+        optionD = #{record.optiond,jdbcType=VARCHAR},
+      </if>
+      <if test="record.answer != null" >
+        answer = #{record.answer,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update singleproblem
+    set single_problem_id = #{record.singleProblemId,jdbcType=INTEGER},
+      title = #{record.title,jdbcType=VARCHAR},
+      optionA = #{record.optiona,jdbcType=VARCHAR},
+      optionB = #{record.optionb,jdbcType=VARCHAR},
+      optionC = #{record.optionc,jdbcType=VARCHAR},
+      optionD = #{record.optiond,jdbcType=VARCHAR},
+      answer = #{record.answer,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xxx.bean.Singleproblem" >
+    update singleproblem
+    <set >
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="optiona != null" >
+        optionA = #{optiona,jdbcType=VARCHAR},
+      </if>
+      <if test="optionb != null" >
+        optionB = #{optionb,jdbcType=VARCHAR},
+      </if>
+      <if test="optionc != null" >
+        optionC = #{optionc,jdbcType=VARCHAR},
+      </if>
+      <if test="optiond != null" >
+        optionD = #{optiond,jdbcType=VARCHAR},
+      </if>
+      <if test="answer != null" >
+        answer = #{answer,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where single_problem_id = #{singleProblemId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xxx.bean.Singleproblem" >
+    update singleproblem
+    set title = #{title,jdbcType=VARCHAR},
+      optionA = #{optiona,jdbcType=VARCHAR},
+      optionB = #{optionb,jdbcType=VARCHAR},
+      optionC = #{optionc,jdbcType=VARCHAR},
+      optionD = #{optiond,jdbcType=VARCHAR},
+      answer = #{answer,jdbcType=VARCHAR}
+    where single_problem_id = #{singleProblemId,jdbcType=INTEGER}
+  </update>
+</mapper>
